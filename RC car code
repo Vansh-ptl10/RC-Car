@@ -1,0 +1,118 @@
+#include "BluetoothSerial.h"
+
+BluetoothSerial SerialBT;
+
+
+const int enaPin = 4;   
+const int n1 = 16;      
+const int n2 = 17;      
+const int enbPin = 18;
+const int n3 = 19;
+const int n4 = 21;
+
+
+const int pwmChannel = 0;        
+const int pwmChannelB = 1;
+const int pwmFreq = 5000;        
+const int pwmResolution = 8;     
+const int motorSpeed = 180;      
+
+void setup() {
+  
+  Serial.begin(115200);
+  
+  
+  SerialBT.begin("ESP32Carnew");
+  Serial.println("Bluetooth started, waiting for connection...");
+
+  
+  pinMode(n1, OUTPUT);
+  pinMode(n2, OUTPUT);
+  pinMode(enaPin, OUTPUT);
+  pinMode(n3, OUTPUT);
+  pinMode(n4, OUTPUT);
+  pinMode(enbPin, OUTPUT);
+
+  
+  ledcAttachChannel(enaPin, pwmFreq, pwmResolution, pwmChannel);
+  ledcWrite(enaPin, motorSpeed); 
+
+  ledcAttachChannel(enbPin, pwmFreq, pwmResolution, pwmChannelB);
+  ledcWrite(enbPin, motorSpeed); 
+}
+
+void loop() {
+  if (SerialBT.available()) {
+    char cmd = SerialBT.read();
+    Serial.print("Received command: ");
+    Serial.println(cmd);
+
+    switch (cmd) {
+      case 'w': // Forward
+        digitalWrite(n1, LOW);
+        digitalWrite(n2, HIGH);
+        digitalWrite(n4, LOW);
+        digitalWrite(n3, HIGH);
+        ledcWrite(enaPin, motorSpeed); 
+        ledcWrite(enbPin, motorSpeed);
+        Serial.println("Motor: Forward");
+        break;
+
+      case 's': // Backward
+        digitalWrite(n1, HIGH);
+        digitalWrite(n2, LOW);
+        digitalWrite(n4, HIGH);
+        digitalWrite(n3, LOW);
+        ledcWrite(enaPin, motorSpeed); 
+        ledcWrite(enbPin, motorSpeed);
+        Serial.println("Motor: Backward");
+        break;
+
+      case '0': // Stop
+        digitalWrite(n1, LOW);
+        digitalWrite(n2, LOW);
+        digitalWrite(n4, LOW);
+        digitalWrite(n3, LOW);
+        ledcWrite(enaPin, 0); 
+        ledcWrite(enbPin, 0);
+        Serial.println("Motor: Stopped");
+        break;
+      
+      case 'a': // rotate left
+        digitalWrite(n1, HIGH);
+        digitalWrite(n2, LOW);
+        digitalWrite(n4, LOW);
+        digitalWrite(n3, HIGH);
+        ledcWrite(enaPin, motorSpeed); 
+        ledcWrite(enbPin, motorSpeed);
+        delay(500);
+        digitalWrite(n1, LOW);
+        digitalWrite(n2, LOW);
+        digitalWrite(n4, LOW);
+        digitalWrite(n3, LOW);
+        ledcWrite(enaPin, 0); 
+        ledcWrite(enbPin, 0);
+        break;
+      
+      case 'd': // rotate right
+        digitalWrite(n1, LOW);
+        digitalWrite(n2, HIGH);
+        digitalWrite(n4, HIGH);
+        digitalWrite(n3, LOW);
+        ledcWrite(enaPin, motorSpeed); 
+        ledcWrite(enbPin, motorSpeed);
+        delay(500);
+        digitalWrite(n1, LOW);
+        digitalWrite(n2, LOW);
+        digitalWrite(n4, LOW);
+        digitalWrite(n3, LOW);
+        ledcWrite(enaPin, 0); 
+        ledcWrite(enbPin, 0);
+        break;
+
+      default:
+        Serial.println("Invalid command");
+        break;
+    }
+  }
+}
