@@ -2,10 +2,10 @@
 
 BluetoothSerial SerialBT;
 
-// Motor driver pins (L298N/L293D)
-const int enaPin = 4;   // PWM pin for speed control
-const int n1 = 16;      // Direction pin 1
-const int n2 = 17;      // Direction pin 2
+
+const int enaPin = 4;   
+const int n1 = 16;      
+const int n2 = 17;      
 const int enbPin = 18;
 const int n3 = 19;
 const int n4 = 21;
@@ -18,7 +18,7 @@ const int pwmResolution = 8;     // 8-bit resolution (0–255)
 const int motorSpeed = 180;      // Fixed speed (50% duty cycle)
 
 void setup() {
-  // Initialize serial for debugging
+  
   Serial.begin(115200);
   
   // Initialize Bluetooth
@@ -33,7 +33,7 @@ void setup() {
   pinMode(n4, OUTPUT);
   pinMode(enbPin, OUTPUT);
 
-  // Initialize PWM on enaPin
+  
   ledcAttachChannel(enaPin, pwmFreq, pwmResolution, pwmChannel);
   ledcWrite(enaPin, motorSpeed); // Set fixed speed
 
@@ -53,7 +53,7 @@ void loop() {
         digitalWrite(n2, HIGH);
         digitalWrite(n4, LOW);
         digitalWrite(n3, HIGH);
-        ledcWrite(enaPin, motorSpeed); // Ensure PWM is active
+        ledcWrite(enaPin, motorSpeed); 
         ledcWrite(enbPin, motorSpeed);
         Serial.println("Motor: Forward");
         break;
@@ -63,7 +63,7 @@ void loop() {
         digitalWrite(n2, LOW);
         digitalWrite(n4, HIGH);
         digitalWrite(n3, LOW);
-        ledcWrite(enaPin, motorSpeed); // Ensure PWM is active
+        ledcWrite(enaPin, motorSpeed); 
         ledcWrite(enbPin, motorSpeed);
         Serial.println("Motor: Backward");
         break;
@@ -73,7 +73,7 @@ void loop() {
         digitalWrite(n2, LOW);
         digitalWrite(n4, LOW);
         digitalWrite(n3, LOW);
-        ledcWrite(enaPin, 0); // Disable PWM to stop motor
+        ledcWrite(enaPin, 0); 
         ledcWrite(enbPin, 0);
         Serial.println("Motor: Stopped");
         break;
@@ -83,14 +83,14 @@ void loop() {
         digitalWrite(n2, LOW);
         digitalWrite(n4, LOW);
         digitalWrite(n3, HIGH);
-        ledcWrite(enaPin, motorSpeed); // Ensure PWM is active
+        ledcWrite(enaPin, motorSpeed); 
         ledcWrite(enbPin, motorSpeed);
         delay(500);
         digitalWrite(n1, LOW);
         digitalWrite(n2, LOW);
         digitalWrite(n4, LOW);
         digitalWrite(n3, LOW);
-        ledcWrite(enaPin, 0); // Disable PWM to stop motor
+        ledcWrite(enaPin, 0); 
         ledcWrite(enbPin, 0);
         break;
       
@@ -99,14 +99,14 @@ void loop() {
         digitalWrite(n2, HIGH);
         digitalWrite(n4, HIGH);
         digitalWrite(n3, LOW);
-        ledcWrite(enaPin, motorSpeed); // Ensure PWM is active
+        ledcWrite(enaPin, motorSpeed); 
         ledcWrite(enbPin, motorSpeed);
         delay(500);
         digitalWrite(n1, LOW);
         digitalWrite(n2, LOW);
         digitalWrite(n4, LOW);
         digitalWrite(n3, LOW);
-        ledcWrite(enaPin, 0); // Disable PWM to stop motor
+        ledcWrite(enaPin, 0); 
         ledcWrite(enbPin, 0);
         break;
 
